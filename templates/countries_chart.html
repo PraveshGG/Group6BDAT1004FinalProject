@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <!-- AIzaSyBwNc3ZLKdmEtJiPNPM9ZKaP0MEoGPYZV0 -->
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Total Active, Deaths and Recovered Cases</title>
+    <script type="text/javascript" src="https://www.gstatic.com/charts/loader.js"></script>
+    <script type="text/javascript">
+        google.charts.load('current', {
+          'packages':['geochart'],
+          // Note: you will need to get a mapsApiKey for your project.
+          // See: https://developers.google.com/chart/interactive/docs/basic_load_libs#load-settings
+          'mapsApiKey': 'AIzaSyBwNc3ZLKdmEtJiPNPM9ZKaP0MEoGPYZV0'
+        });
+        google.charts.setOnLoadCallback(drawRegionsMap);
+  
+        function drawRegionsMap() {
+            var data1 = google.visualization.arrayToDataTable([
+            ['Country', 'Cases', 'deaths'],
+            ['US', 4924619,160490],
+            ['China', 84491,4634],
+            ['Canada', 117878,8958],
+            ['India', 1958592,40722],
+            ['Ru', 866627,14490],
+            ['Australia', 19444,247]]);
+
+          var options = {};
+  
+          var chart = new google.visualization.GeoChart(document.getElementById('regions_div'));
+  
+          chart.draw(data1, options);
+        }
+      </script>
+
+    <script type="text/javascript">
+      google.charts.load('current', {'packages':['table']});
+      google.charts.setOnLoadCallback(drawTable);
+
+      function drawTable() {
+        var active = {{ data.active }};
+        var deaths = {{ data.deaths }};
+        var recovered = {{ data.recovered }};
+
+        var data = new google.visualization.DataTable();
+        data.addColumn('string', 'Stats');
+        data.addColumn('number', 'Number of Cases');
+      
+        data.addRows([
+          ['Active',  {v: active}],
+          ['Deaths',   {v:deaths}],
+          ['Recovered', {v: recovered}]
+        ]);
+
+        var table = new google.visualization.Table(document.getElementById('table_div'));
+
+        table.draw(data, {showRowNumber: true, width: '100%', height: '100%'});
+      }
+    </script>
+
+
+
+</head>
+
+<body>
+    <div id="regions_div" style="width: 900px; height: 500px;"></div>
+    <div id="pie" style="width: 900px; height: 500px;"></div>
+    <script>
+
+        google.charts.load('current', { 'packages': ['corechart'] });
+        google.charts.setOnLoadCallback(drawChart);
+
+        function drawChart() {
+
+            var active = {{ data.active }};
+            var deaths = {{ data.deaths }};
+            var recovered = {{ data.recovered }};
+            var chart = new google.visualization.PieChart(document.getElementById('pie'));
+
+            var data = google.visualization.arrayToDataTable([
+                ['Cases', 'Count'],
+                ['Active', active],
+                ['Deaths', deaths],
+                ['Recovered', recovered]
+            ]);
+            chart.draw(data, { title: 'Total Active, Deaths and Recovered Cases' });
+        }
+
+    </script>
+    <div id="table_div"></div>
+    
+
+
+</body>
+
+</html>
